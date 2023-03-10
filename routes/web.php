@@ -21,9 +21,9 @@ use App\Http\Controllers\Admin\UserPatternController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
@@ -42,8 +42,12 @@ Route::controller(\App\Http\Controllers\Auth\AuthController::class)->group(funct
 
    Route::get('forgot-password', 'forgotPasswords')->name('forgot-password');
    Route::post('forgotPassword', 'forgotPassword')->name('forgotPassword');
+
+   Route::get('verify-code', 'verify')->name('verify');
+   Route::post('verify-code', 'verifyCode')->name('verify-code');
+
    Route::post('updatePassword', 'updatePassword')->name('updatePassword');
-   route::get('resetpassword/{id}','resetpassword')->name('resetpassword');
+   route::get('resetpassword','resetpassword')->name('resetpassword');
 
 });
 

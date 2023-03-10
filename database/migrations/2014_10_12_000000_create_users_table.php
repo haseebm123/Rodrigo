@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone_number')->nullable();
             $table->string('profile')->nullable();
+            $table->interger('otp')->nullable();
             $table->enum('type', ['admin', 'user'])->default('user');
             $table->integer('status')->nullable()->default(1);
             $table->rememberToken();

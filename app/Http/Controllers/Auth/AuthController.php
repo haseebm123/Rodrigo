@@ -31,10 +31,10 @@ class AuthController extends Controller
     {
         return view('auth.forgot-password');
     }
-    public function resetpassword($id)
+    public function resetpassword()
     {
 
-        return view('auth.resetpasswords-password',compact('id'));
+        return view('auth.resetpasswords-password');
     }
 
     public function loginAdminProcess(Request $request)
@@ -107,15 +107,17 @@ class AuthController extends Controller
                 $first_name = $user->first_name??'';
                 $last_name = $user->last_name??'';
                 $email = $user->email;
-                $fourRandomDigit = time().rand(1000,9999);
-                User::where('email',$request->email)->update(['remember_token'=>$fourRandomDigit]);
-
+                $fourRandomDigit = rand(1000,9999);
+                User::where('email',$request->email)->update(['otp'=>$fourRandomDigit]);
                 $data = array('otp'=>$fourRandomDigit);
-                $send = Mail::send("admin/mails/mail2", $data, function($message) use($email,$first_name,$last_name) {
+                $send = Mail::send("auth/mails/otp", $data, function($message) use($email,$first_name,$last_name) {
                     $message->to($email, $first_name." ".$last_name)->subject('You have requested to reset your password');
                     $message->from('robertsonalexander40@gmail.com','Test');
                 });
-                return redirect()->back()->with(['message'=>"Pasword Reset link has been sent to your email",'type'=>'success']);
+
+                $request->session()->put('email_verify', $email);
+
+                return redirect()->route('verify');
             }else{
                 return redirect()->back()->with(['message'=>"Invalid Email",'type'=>'error']);
             }
@@ -125,16 +127,38 @@ class AuthController extends Controller
         }
     }
 
+    public function verify(){
+         return view('auth.verifies');
+    }
+
+    public function verifyCode(Request $request){
+        if($request->has("email")){
+            $user = User::where('email',$request->email)->where('otp',$request->otp)->get()->first();
+            if($user)
+            {
+                return redirect()->route('resetpassword');
+            }else{
+                return redirect()->back()->with(['message'=>"Invalid Code",'type'=>'error']);
+            }
+            return $user;
+
+        }else
+        {
+            return redirect()->route('forgot-password')->with(['message'=>"Please provide emai",'type'=>'error']);
+        }
+    }
     public function updatePassword(Request $request)
     {
-        if($request->has("remember_token"))
+
+        if(Session::has("email_verify"))
         {
+
             if($request->has("password"))
             {
-                $user = User::where('remember_token',$request->remember_token)->get()->first();
+                $user = User::where('email',Session::get("email_verify"))->get()->first();
                 if($user)
                 {
-                    User::where('remember_token',$request->remember_token)->update(['remember_token'=>time().rand(1000,9999),'password'=>Hash::make($request->password)]);
+                    User::where('email',Session::get("email_verify"))->update(['password'=>Hash::make($request->password)]);
                     return redirect()->route('login')->with(['message'=>"Password reset Successfully",'type'=>'success']);
                 }else
                 {
@@ -147,7 +171,7 @@ class AuthController extends Controller
         }else
         {
 
-            return redirect()->back()->with(['message'=>"Please provide reset password token",'type'=>'error']);
+            return redirect()->route('forgot-password')->with(['message'=>"Please provide emails",'type'=>'error']);
         }
     }
 }

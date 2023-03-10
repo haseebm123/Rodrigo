@@ -1,6 +1,5 @@
-
-@extends('auth.layouts.app')
-@section('title', 'Reset Password')
+ @extends('auth.layouts.app')
+@section('title', 'Verify')
 @section('content')
 
 <div class="app-content content">
@@ -22,33 +21,35 @@
                                 <div class="card rounded-0 mb-0 px-2">
                                     <div class="card-header pb-1">
                                         <div class="card-title">
-                                            <h4 class="mb-0">Reset Password</h4>
+                                            <h4 class="mb-0">Verify</h4>
                                         </div>
                                     </div>
-                                    <p class="px-2">Please enter your new password.</p>
+                                    {{-- <p class="px-2">Please otp send to your email</p> --}}
                                     <div class="card-content">
                                         <div class="card-body pt-1">
-                                            <form action="{{ route('updatePassword') }}" method="post" novalidate>
+                                            <form action="{{ route('verify-code') }}" method="post" novalidate>
                                                 @csrf
                                                 <fieldset class="form-label-group form-group">
                                                     <div class="controls">
-                                                        <label for="user-password">Password</label>
-                                                        <input type="password" name="password" class="form-control"
+                                                        <label for="user-password">Email</label>
+                                                        <input type="email" name="email" class="form-control"
                                                             id="user-password" placeholder="Password"
                                                             data-validation-required-message="The password field is required"
-                                                            minlength="5" required>
-
+                                                            readonly
+                                                            value='{{ Session::get('email_verify')??null }}'
+                                                            required>
                                                     </div>
                                                 </fieldset>
 
                                                 <fieldset class="form-label-group form-group">
                                                     <div class="controls">
 
-                                                        <label for="user-confirm-password">Confirm Password</label>
-                                                        <input type="password" class="form-control"
-                                                            name="confirm-password" id="user-confirm-password"
-                                                            placeholder="Confirm Password" required
-                                                            data-validation-match-match="password"
+                                                        <label>Code</label>
+                                                        <input type="number" class="form-control"
+                                                            name="otp"
+                                                            id="otp"
+                                                            maxlength="4"
+                                                            placeholder="Enter Code" required
                                                             data-validation-required-message="The Confirm password field is required">
                                                     </div>
                                                 </fieldset>
@@ -60,7 +61,7 @@
                                                     </div>
                                                     <div class="col-12 col-md-6 mb-1">
                                                         <button type="submit"
-                                                            class="btn btn-primary btn-block px-0">Reset</button>
+                                                            class="btn btn-primary btn-block px-0">Verify</button>
                                                     </div>
                                                 </div>
                                             </form>
