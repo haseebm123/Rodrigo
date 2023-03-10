@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\UserPatternController;
 
 
 // For User
-use App\Http\Controllers\User\UserController as UController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Auth::routes();
 
 
 
-Route::controller(\App\Http\Controllers\AuthController::class)->group(function () {
+Route::controller(\App\Http\Controllers\Auth\AuthController::class)->group(function () {
 
    route::get('login','user_login')->name('login')->middleware('guest');
    route::post('loginAdminProcess','loginAdminProcess')->name('loginAdminProcess') ;
@@ -64,10 +64,7 @@ Route::middleware(['auth','can:isAdmin'])->prefix('admin')->group(function()
 
 Route::middleware(['auth','can:isUser'])->prefix('user')->group(function(){
 
-    Route::controller(UController::class)->group(function () {
 
-
-  });
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

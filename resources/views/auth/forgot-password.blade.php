@@ -1,6 +1,6 @@
 
 
-@extends('layouts.app')
+@extends('auth.layouts.app')
 @section('title','Forget Password')
 @section('content')
      <div class="app-content content">
