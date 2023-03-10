@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Route;
 // For Admin
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\UserPatternController;
 
 
 // For User
+use App\Http\Controllers\Front\SubscriptionController;
 
 
 /*
@@ -56,7 +56,6 @@ Route::controller(\App\Http\Controllers\Auth\AuthController::class)->group(funct
 Route::middleware(['auth','can:isAdmin'])->prefix('admin')->group(function()
 {
     Route::resource('users', UserController::class);
-    Route::resource('userspattern', UserPatternController::class);
     Route::get('user-change-status', [UserController::class,'change_status'])->name('admin-user-change-status');
     Route::controller(AdminController::class)->group(function ()
     {
@@ -73,3 +72,8 @@ Route::middleware(['auth','can:isUser'])->prefix('user')->group(function(){
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
+
+// subscription
+    Route::get('plans', [SubscriptionController::class, 'index']);
+    Route::get('plans/{plan}', [SubscriptionController::class, 'show'])->name("plans.show");
+    Route::post('subscription', [SubscriptionController::class, 'subscription'])->name("subscription.create");;
