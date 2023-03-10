@@ -11,63 +11,58 @@
 
                     <div class="card-content">
                         <div class="card-body">
-                            <form class="form-horizontal" action="{{ route('users.store') }}" novalidate
+                            <form class="form-horizontal" action="{{ route('plan.store') }}" novalidate
                                 enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>First Name</label>
+                                            <label>Plan Name</label>
                                             <div class="controls">
-                                                <input type="text" name="first_name" class="form-control"
+                                                <input type="text" name="name" class="form-control"
                                                     data-validation-required-message="This field is required"
-                                                    placeholder="First Name">
+                                                    placeholder="Plan Name">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Last Name</label>
+                                        {{-- <div class="form-group">
+                                            <label>Currency</label>
                                             <div class="controls">
-                                                <input type="text" name="last_name" class="form-control" required
+                                                <input type="text" name="currency" class="form-control" required
+                                                    value="$" readonly
                                                     data-validation-required-message="This field is required"
-                                                    placeholder="Last Name">
+                                                    placeholder="Cost">
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group">
-                                            <label>Email</label>
+                                            <label>Cost</label>
                                             <div class="controls">
-                                                <input type="text" name="email" class="form-control" required
+                                                <input type="number" name="cost" class="form-control" required
                                                     data-validation-required-message="This field is required"
-                                                    placeholder="Enter Character only">
+                                                    placeholder="Cost">
                                             </div>
                                         </div>
+
                                         <div class="form-group">
-                                            <label>Password</label>
-                                            <div class="controls">
-                                                <input type="password" name="password" class="form-control"
-                                                    data-validation-required-message="This field is required"
-                                                    placeholder="Password">
-                                            </div>
+                                            <fieldset class="form-group">
+                                                <label>Billing Peroid</label>
+                                                <select class="custom-select" id="customSelect" name="billing_period">
+                                                    <option selected="">Select Billing Period</option>
+                                                    <option value="week">Weekly</option>
+                                                    <option value="month">Monthly</option>
+                                                    <option value="year">Yearly</option>
+                                                </select>
+                                            </fieldset>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Repeat password must match</label>
-                                            <div class="controls">
-                                                <input type="password" name="password_confirm"
-                                                    data-validation-match-match="password" class="form-control"
-                                                    data-validation-required-message="Repeat password must match"
-                                                    placeholder="Repeat Password">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Must be a valid email</label>
-                                            <div class="controls">
-                                                <input type="file" name="profile" class="form-control"
-                                                    placeholder="Email">
-                                            </div>
-                                        </div>
+
+                                        <fieldset class="form-label-group mb-0">
+                                            <textarea class="form-control char-textarea" name="description" id="description" rows="3" placeholder="Description"></textarea>
+
+                                        </fieldset>
+
                                     </div>
 
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary mt-2">Submit</button>
                             </form>
                         </div>
                     </div>
@@ -96,6 +91,7 @@
             var image = document.getElementById('output');
             image.src = URL.createObjectURL(event.target.files[0]);
         };
+
     </script>
 
     <script type="text/javascript">

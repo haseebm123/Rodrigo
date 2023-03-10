@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('stripe_plan');
-            $table->integer('price');
-            $table->string('description');
+            $table->string('plan_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('billing_method')->nullable();
+            $table->string('price')->nullable();
+            $table->string('currency')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

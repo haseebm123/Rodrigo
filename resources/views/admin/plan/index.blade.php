@@ -11,56 +11,52 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            @can('user-create')
-                                <a class="btn btn-success" href="{{ route('users.create') }}"> Create New User</a>
-                            @endcan
-                        </div>
+                        {{-- <div class="card-header">
+
+                                <a class="btn btn-success" href="{{ route('plan.create') }}"> Create New User</a>
+
+                        </div> --}}
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table class="table table-striped dataex-html5-selectors">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Profile</th>
-                                        <th>Status</th>
+                                        <th>Name</th>
+                                        <th>Billing_method</th>
+                                        <th>price </th>
+                                        {{-- <th>currency</th> --}}
+                                        {{-- <th>description</th> --}}
+                                        {{-- <th>Status</th> --}}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
 
-                                @forelse ($data as $key => $user)
+                                @forelse ($data as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $user->first_name }}</td>
-                                        <td>{{ $user->last_name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td><img class="profile-user-img img-fluid"
-                                                src='{{ asset("documents/profile/$user->profile") }}' width="50px"
-                                                alt="User profile picture"></td>
-
-
-                                        <td>
+                                        <td>{{ $item->name??null }}</td>
+                                        <td>{{ $item->billing_method??null }}</td>
+                                        <td>{{ $item->price??null }}</td>
+                                        {{-- <td>
                                             <div class="form-group">
                                                 <div
                                                     class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                                                     <input type="checkbox" class="custom-control-input switch-input"
-                                                        id="{{ $user->id }}" {{ $user->status == 1 ? 'checked' : '' }}>
-                                                    <label class="custom-control-label" for="{{ $user->id }}"></label>
+                                                        id="{{ $item->id }}" {{ $item->status == 1 ? 'checked' : '' }}>
+                                                    <label class="custom-control-label" for="{{ $item->id }}"></label>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> --}}
 
                                         <td>
-                                            <a class="btn btn-info" href="{{ route('users.show', $user->id) }}"><span
+                                            <a class="btn btn-info" href="{{ route('plan.show', $item->slug) }}"><span
                                                     class="action-edit"><i class="feather icon-eye"></i></span></a>
-                                            <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}"><span
+                                            <a class="btn btn-primary" href="{{ route('plan.edit', $item->slug) }}"><span
                                                     class="action-edit"><i class="feather icon-edit"></i></span></a>
 
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <form method="post" action="{{ route('users.destroy', $user->id) }}"
+                                            {{-- <form method="post" action="{{ route('plan.destroy', $item->id) }}"
                                                 style="margin-top: -38px;margin-left: 150px";>
                                                 @csrf
                                                 @method('delete')
@@ -69,7 +65,7 @@
                                                     class="btn btn-danger btn btn-default generalsetting_admin"><span
                                                         class="action-delete"><i
                                                             class="feather icon-trash"></i></span></button>
-                                            </form>
+                                            </form> --}}
 
                                         </td>
                                     </tr>

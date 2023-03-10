@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 // For Admin
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PlanController;
 
 
 // For User
@@ -53,6 +54,7 @@ Route::controller(\App\Http\Controllers\Auth\AuthController::class)->group(funct
 
 
 
+Route::resource('plan', PlanController::class);
 Route::middleware(['auth','can:isAdmin'])->prefix('admin')->group(function()
 {
     Route::resource('users', UserController::class);

@@ -168,19 +168,10 @@
 
                     </ul>
                 </li>
-                <li class=" nav-item"><a href="#"><i class="feather icon-user"></i><span class="menu-title"
-                            data-i18n="User">User Pattern</span></a>
-                    <ul class="menu-content">
-                        <li class="@if (Route::currentRouteName() == 'userspattern.index') active @endif"><a
-                                href="{{ route('userspattern.index') }}"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="List">List</span></a>
-                        </li>
-                        <li class="@if (Route::currentRouteName() == 'userspattern.create') active @endif"><a
-                                href="{{ route('userspattern.create') }}"><i class="feather icon-circle"></i><span
-                                    class="menu-item" data-i18n="View">Create User</span></a>
-                        </li>
+                <li class="nav-item @if (Route::currentRouteName() == 'plan.index' || Route::currentRouteName() == 'plan.create' || Route::currentRouteName() == 'plan.edit') active @endif">
+                    <a href="{{ route('plan.index') }}"><i class="feather icon-user"></i><span class="menu-title"
+                            data-i18n="User">Plan</span></a>
 
-                    </ul>
                 </li>
 
 

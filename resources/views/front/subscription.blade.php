@@ -2,129 +2,122 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .alert.parsley {
-            margin-top: 5px;
-            margin-bottom: 0px;
-            padding: 10px 15px 10px 15px;
-        }
-
-        .check .alert {
-            margin-top: 20px;
-        }
-
-        .credit-card-box .panel-title {
-            display: inline;
-            font-weight: bold;
-        }
-
-        .credit-card-box .display-td {
-            display: table-cell;
-            vertical-align: middle;
-            width: 100%;
-        }
-
-        .credit-card-box .display-tr {
-            display: table-row;
-        }
-    </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
 
-<body id="app-layout">
-   <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    You will be charged ${{ number_format($plan->price, 2) }} for {{ $plan->name }} Plan
-                </div>
+<body>
+    <form action="{{ route('subscription.create') }}" method="POST" id="subscribe-form">
 
-                <div class="card-body">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="subscription-option">
+                        <label for="plan-silver">
+                            <span>Your Subscription is</span> <strong>{{ $plan->name }}</strong>
+                            <input type="hidden" name="plan_id" value="{{ $plan->plan_id }}">
+                            <input  type="number" name="amount" id="amount" class="form-control" value="{{ $plan->price??null }}" readonly>
 
-                    <form id="payment-form" action="{{ route('subscription.create') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="plan" id="plan" value="{{ $plan->id }}">
-
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-4">
-                                <div class="form-group">
-                                    <label for="">Name</label>
-                                    <input type="text" name="name" id="card-holder-name" class="form-control" value="" placeholder="Name on the card">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-4">
-                                <div class="form-group">
-                                    <label for="">Card details</label>
-                                    <div id="card-element"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12">
-                            <hr>
-                                <button type="submit" class="btn btn-primary" id="card-button" data-secret="{{ $intent->client_secret }}">Purchase</button>
-                            </div>
-                        </div>
-
-                    </form>
-
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-    const stripe = Stripe('{{ env('STRIPE_KEY') }}')
-
-    const elements = stripe.elements()
-    const cardElement = elements.create('card')
-
-    cardElement.mount('#card-element')
-
-    const form = document.getElementById('payment-form')
-    const cardBtn = document.getElementById('card-button')
-    const cardHolderName = document.getElementById('card-holder-name')
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault()
-
-        cardBtn.disabled = true
-        const { setupIntent, error } = await stripe.confirmCardSetup(
-            cardBtn.dataset.secret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: cardHolderName.value
+        <label for="card-holder-name">Card Holder Name</label>
+        @php
+            $name = auth()->user()->first_name.' '.auth()->user()->last_name
+        @endphp
+        <input  id="card-holder-name" type="text" value="{{ strtoupper($name) }}" disabled>
+        @csrf
+        <div class="form-row">
+            <label for="card-element">Credit or debit card</label>
+            <div id="card-element" class="form-control"> </div>
+            <!-- Used to display form errors. -->
+            <div id="card-errors" role="alert"></div>
+        </div>
+        <div class="stripe-errors"></div>
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}<br>
+                @endforeach
+            </div>
+        @endif
+        <div class="form-group text-center">
+            <button type="button" id="card-button" data-secret="{{ $intent->client_secret }}"
+                class="btn btn-lg btn-success btn-block">Process</button>
+        </div>
+    </form>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('{{ env('STRIPE_KEY') }}');
+        var elements = stripe.elements();
+        var style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
+        var card = elements.create('card', {
+            hidePostalCode: true,
+            style: style
+        });
+        card.mount('#card-element');
+        console.log(document.getElementById('card-element'));
+        card.addEventListener('change', function(event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+        const cardHolderName = document.getElementById('card-holder-name');
+        const cardButton = document.getElementById('card-button');
+        const clientSecret = cardButton.dataset.secret;
+        cardButton.addEventListener('click', async (e) => {
+            console.log("attempting");
+            const {
+                setupIntent,
+                error
+            } = await stripe.confirmCardSetup(
+                clientSecret, {
+                    payment_method: {
+                        card: card,
+                        billing_details: {
+                            name: cardHolderName.value
+                        }
                     }
                 }
+            );
+            if (error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+            } else {
+                paymentMethodHandler(setupIntent.payment_method);
             }
-        )
+        });
 
-        if(error) {
-            cardBtn.disable = false
-        } else {
-            let token = document.createElement('input')
-            token.setAttribute('type', 'hidden')
-            token.setAttribute('name', 'token')
-            token.setAttribute('value', setupIntent.payment_method)
-            form.appendChild(token)
+        function paymentMethodHandler(payment_method) {
+            var form = document.getElementById('subscribe-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'payment_method');
+            hiddenInput.setAttribute('value', payment_method);
+            form.appendChild(hiddenInput);
             form.submit();
         }
-    })
-</script>
+    </script>
 </body>
 
 </html>
