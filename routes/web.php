@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\PlanController;
 
 // For User
 use App\Http\Controllers\Front\SubscriptionController;
+use App\Http\Controllers\Front\CarLoanCalculator;
+use App\Http\Controllers\Front\LongTermInvestmentCaculator;
 
 
 /*
@@ -78,4 +80,14 @@ Route::get('logout', [App\Http\Controllers\HomeController::class, 'logout'])->na
 // subscription
     Route::get('plans', [SubscriptionController::class, 'index']);
     Route::get('plans/{plan}', [SubscriptionController::class, 'show'])->name("plans.show");
-    Route::post('subscription', [SubscriptionController::class, 'subscription'])->name("subscription.create");;
+    Route::post('subscription', [SubscriptionController::class, 'subscription'])->name("subscription.create");
+
+    // Car Laon Calculator
+    Route::get('car-loan-calculator', [CarLoanCalculator::class, 'index'])->name('car-loan-calculator');
+    Route::post('car-loan-calculator/calculate', [CarLoanCalculator::class, 'calCarLoan'])->name('calculate.car.loan');
+
+    // Investment Calculator
+    Route::get('investment-calculator', [LongTermInvestmentCaculator::class, 'index'])->name('investment.calculator');
+    Route::post('investment/calculate', [LongTermInvestmentCaculator::class, 'calInvestment'])->name('calculate.investment');
+
+
