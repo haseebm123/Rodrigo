@@ -28,6 +28,7 @@ class LongTermInvestmentCaculator extends Controller
     public function yearlyTable($arr,$age,$initail, $recurring)
     {
         $result = [];
+
         $index = 11;
         for ($i=0; $i <= count($arr) ; $i++) {
             if (isset($arr[$i*12])) {
@@ -41,7 +42,6 @@ class LongTermInvestmentCaculator extends Controller
                 }else{
                     $last_index = $result[$i-1]['total_invest_year'];
                     $result[$i]['total_invest_year'] = $last_index + ($recurring *12);
-
                 }
                 $result[$i]['total_intrest_year'] = round($result[$i]['total_balance_year'] - $result[$i]['total_invest_year'],2) ;
                 $index = $index + 12;
