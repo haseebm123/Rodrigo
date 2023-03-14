@@ -7,7 +7,7 @@
     <br>
     <section id="dashboard-analytics">
         <div class="container-fluid">
-             <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         {{-- <div class="card-header">
@@ -22,24 +22,21 @@
                                 <thead>
                                     <tr>
 
-                                       <th>Loan Term
-                                            <br>
-                                            <span>(In month)</span>
-                                        </th>
-                                        <th>Monthly Payment</th>
-                                        <th>Total Interest Paid </th>
+                                        <th>Number of years making the same monthly contribution</th>
+                                        <th>Your age then</th>
+                                        <th>Total account balance at the end of this period</th>
+                                        <th>Total invested during this period</th>
+                                        <th>Total interest accrued during this period</th>
                                     </tr>
                                 </thead>
 
                                 @forelse ($result as $key => $item)
                                     <tr>
-                                        <td>{{ $item['Loan Term'] }}</td>
-                                        <td>${{ $item['Monthly Payment'] }}</td>
-                                        <td>${{ $item['Total Interest Paid'] }}</td>
-
-
-
-
+                                        <td>{{ $item['years'] }}</td>
+                                        <td>{{ $item['age'] }}</td>
+                                        <td>${{ $item['total_balance_year'] }}</td>
+                                        <td>${{ $item['total_invest_year'] }}</td>
+                                        <td>${{ $item['total_intrest_year'] }}</td>
 
                                     </tr>
                                 @empty
@@ -59,7 +56,4 @@
 @endsection
 
 @section('footer-script')
-
-
-
 @endsection
