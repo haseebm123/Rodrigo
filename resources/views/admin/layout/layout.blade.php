@@ -185,6 +185,10 @@
                                 href="{{ route('investment.calculator') }}"><i class="feather icon-circle"></i><span
                                     class="menu-item" data-i18n="View">Long Term Investment</span></a>
                         </li>
+                        <li class="@if (Route::currentRouteName() == 'mortgage.calculator' || Route::currentRouteName() == 'calculate.mortgage') active @endif"><a
+                                href="{{ route('mortgage.calculator') }}"><i class="feather icon-circle"></i><span
+                                    class="menu-item" data-i18n="View">Mortgage</span></a>
+                        </li>
 
                     </ul>
                 </li>

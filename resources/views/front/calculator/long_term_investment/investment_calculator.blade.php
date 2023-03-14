@@ -1,4 +1,4 @@
-@extends('front.layout.layout')
+@extends('admin.layout.layout')
 @section('header-script')
 @endsection
 

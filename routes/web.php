@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Front\SubscriptionController;
 use App\Http\Controllers\Front\CarLoanCalculator;
 use App\Http\Controllers\Front\LongTermInvestmentCaculator;
+use App\Http\Controllers\Front\MortgageCalculator;
 
 
 /*
@@ -89,5 +90,9 @@ Route::get('logout', [App\Http\Controllers\HomeController::class, 'logout'])->na
     // Investment Calculator
     Route::get('investment-calculator', [LongTermInvestmentCaculator::class, 'index'])->name('investment.calculator');
     Route::post('investment/calculate', [LongTermInvestmentCaculator::class, 'calInvestment'])->name('calculate.investment');
+
+    //
+    Route::get('mortgage-calculator', [MortgageCalculator::class, 'index'])->name('mortgage.calculator');
+    Route::post('mortgage/calculate', [MortgageCalculator::class, 'calInvestment'])->name('calculate.mortgage');
 
 
